@@ -106,8 +106,6 @@ namespace ReplayTableFixer
         public bool compareRestOfRT(string fullRT)
         {
             if (!isLoaded) return false;
-            if (fullRT.Length != 162) return false;
-            if (!IsHex(fullRT)) return false;
 
             for (int i = 0; i < 40; i++)
             {
@@ -128,7 +126,7 @@ namespace ReplayTableFixer
             return true;
         }
 
-        private static bool IsHex(IEnumerable<char> chars)
+        public static bool IsHex(IEnumerable<char> chars)
         {
             bool isHex;
             foreach (var c in chars)
