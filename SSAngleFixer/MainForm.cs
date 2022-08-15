@@ -119,8 +119,23 @@ namespace ReplayTableFixer
                             fullRT += lines[j].Substring(34, 10);
                         }
                     }
+                    // Check if RT is all valid hex chars
+                    if (!SS.IsHex(fullRT))
+                    {
+                        lblAltered_XBC.Text = "Error: Non-hex values found in log's replay table.";
+                        lblAltered_XBC.ForeColor = Color.Red;
+                        clearXBCGroupBox();
+                        return;
+                    }
+                    else if (fullRT.Length != 162)
+                    {
+                        lblAltered_XBC.Text = "Error: Log's replay table size is wrong.";
+                        lblAltered_XBC.ForeColor = Color.Red;
+                        clearXBCGroupBox();
+                        return;
+                    }
                     // validate log by comparing to SS (excluding angles)
-                    if (ssObj.compareRestOfRT(fullRT))
+                    else if (ssObj.compareRestOfRT(fullRT))
                     {
                         found = true;
                         var strRTResponse5 = lines[i + 6].Substring(25, 19).Replace(" ", "");
@@ -168,7 +183,7 @@ namespace ReplayTableFixer
                     }
                     else
                     {
-                        lblAltered_XBC.Text = "Error: SS data in '" + Path.GetFileName(filePath) + "' does not match the SS file.";
+                        lblAltered_XBC.Text = "Error: Data in log does not match the SS file. Is it the right one?";
                         lblAltered_XBC.ForeColor = Color.Red;
                         clearXBCGroupBox();
                         return;
