@@ -112,7 +112,7 @@ namespace ReplayTableFixer
             for (int i = 0; i < 40; i++)
             {
                 byte b = (byte)Int32.Parse(fullRT.Substring(i * 2, 2),
-                        System.Globalization.NumberStyles.HexNumber);
+                    System.Globalization.NumberStyles.HexNumber);
                 if (b != ssBuffer[rtOffset + i])
                     return false;
             }
@@ -120,7 +120,7 @@ namespace ReplayTableFixer
             for (int i = 72; i < 81; i++)
             {
                 byte b = (byte)Int32.Parse(fullRT.Substring(i * 2, 2),
-                        System.Globalization.NumberStyles.HexNumber);
+                    System.Globalization.NumberStyles.HexNumber);
                 if (b != ssBuffer[rtOffset + i])
                     return false;
             }
@@ -134,8 +134,8 @@ namespace ReplayTableFixer
             foreach (var c in chars)
             {
                 isHex = ((c >= '0' && c <= '9') ||
-                         (c >= 'a' && c <= 'f') ||
-                         (c >= 'A' && c <= 'F'));
+                    (c >= 'a' && c <= 'f') ||
+                    (c >= 'A' && c <= 'F'));
 
                 if (!isHex)
                     return false;
@@ -147,8 +147,6 @@ namespace ReplayTableFixer
         {
             return rtOffset == 0x20;
         }
-
-        
     }
-        
+
 }

@@ -14,8 +14,10 @@ namespace ReplayTableFixer
 
         private void loadSS(string filePath)
         {
+            // open up the ss in the helper class 
             if (ssObj.LoadSS(filePath))
             {
+                // grab the angles
                 byte[] r5 = ssObj.GetResponseRT(5);
                 byte[] r6 = ssObj.GetResponseRT(6);
                 byte[] r7 = ssObj.GetResponseRT(7);
@@ -23,12 +25,14 @@ namespace ReplayTableFixer
 
                 ssFilePath.Text = filePath;
                 ssFilePath.SelectionStart = filePath.Length;
+                // show angles as hex
                 rtResponse5.Text = BitConverter.ToString(r5).Replace("-", string.Empty);
                 rtResponse6.Text = BitConverter.ToString(r6).Replace("-", string.Empty);
                 rtResponse7.Text = BitConverter.ToString(r7).Replace("-", string.Empty);
                 rtResponse8.Text = BitConverter.ToString(r8).Replace("-", string.Empty);
 
-
+                // angles are two bytes but byte order is reversed
+                // so flip bytes and save to an int
                 uint r5Angle1 = ((uint)r5[1] << 8) | (uint)r5[0];
                 uint r5Angle2 = ((uint)r5[4] << 8) | (uint)r5[3];
                 uint r6Angle1 = ((uint)r6[1] << 8) | (uint)r6[0];
@@ -38,6 +42,7 @@ namespace ReplayTableFixer
                 uint r8Angle1 = ((uint)r8[1] << 8) | (uint)r8[0];
                 uint r8Angle2 = ((uint)r8[4] << 8) | (uint)r8[3];
 
+                // show angles as degrees in decimal
                 angle1_5.Text = r5Angle1.ToString();
                 angle2_5.Text = r5Angle2.ToString();
                 angle1_6.Text = r6Angle1.ToString();
@@ -47,6 +52,7 @@ namespace ReplayTableFixer
                 angle1_8.Text = r8Angle1.ToString();
                 angle2_8.Text = r8Angle2.ToString();
 
+                // while this isn't a guaranteed way to know if its modified, it'll work most of the time
                 if (r5Angle1 == 1 && r6Angle1 == 91 && r7Angle1 == 181 && r8Angle1 == 271)
                 {
                     lbAltered.Text = "Possible modification detected, load a log.";
@@ -80,10 +86,30 @@ namespace ReplayTableFixer
             var lines = File.ReadAllLines(filePath);
             bool found = false;
 
+            /*
+             * Example of replay table from XBC log
+             * Angles are lines 7-10 on the right half of drive response
+             * 
+            RT CID MOD DATA          Drive Response
+            -- --  --  ------------- -------------------
+            03 3E  00  04A9B0 04B9AF 731C9129 10BE733C00    
+            01 4B  00  20D7F0 20E7EF 09F11BE0 1174E69800    
+            03 E2  00  DF85F0 DF95EF D7F8FCAA AFF4662A00    
+            01 AC  00  FB5B70 FB6B6F 8F19A1BB C29BF21B00    
+            07 79  00  04A9B0 04B72F A87725FD 0200000200    
+            05 C9  00  20D7F0 20E56F 616CC226 5B00005B00    
+            07 F1  00  DF85F0 DF936F 65967796 B50000B500    
+            05 15  00  FB5B70 FB68EF F2710A4C 0E01000E01    
+            E0 29  00  169261 C92791 00000000 0000000000    
+            --------------------------------------------
+            */
+
             for (var i = 0; i < lines.Length; i++)
             {
                 if (lines[i] == "RT CID MOD DATA          Drive Response")
                 {
+                    // save all drive responses into a single string
+                    // used to make sure this is the correct log
                     string fullRT = String.Empty;
                     for (var j = i + 2; j <= i + 10; j++)
                     {
@@ -93,6 +119,7 @@ namespace ReplayTableFixer
                             fullRT += lines[j].Substring(34, 10);
                         }
                     }
+                    // validate log by comparing to SS (excluding angles)
                     if (ssObj.compareRestOfRT(fullRT))
                     {
                         found = true;
@@ -101,6 +128,7 @@ namespace ReplayTableFixer
                         var strRTResponse7 = lines[i + 8].Substring(25, 19).Replace(" ", "");
                         var strRTResponse8 = lines[i + 9].Substring(25, 19).Replace(" ", "");
 
+                        // show angles as hex in the form
                         rtResponse5_XBC.Text = strRTResponse5.Substring(8, 10);
                         rtResponse6_XBC.Text = strRTResponse6.Substring(8, 10);
                         rtResponse7_XBC.Text = strRTResponse7.Substring(8, 10);
@@ -111,6 +139,8 @@ namespace ReplayTableFixer
                         byte[] r7 = ConvertHexStringToByteArray(strRTResponse7.Substring(8, 10));
                         byte[] r8 = ConvertHexStringToByteArray(strRTResponse8.Substring(8, 10));
 
+                        // angles are two bytes but byte order is reversed
+                        // so flip bytes and save to an int
                         uint r5Angle1 = ((uint)r5[1] << 8) | (uint)r5[0];
                         uint r5Angle2 = ((uint)r5[4] << 8) | (uint)r5[3];
                         uint r6Angle1 = ((uint)r6[1] << 8) | (uint)r6[0];
@@ -120,6 +150,7 @@ namespace ReplayTableFixer
                         uint r8Angle1 = ((uint)r8[1] << 8) | (uint)r8[0];
                         uint r8Angle2 = ((uint)r8[4] << 8) | (uint)r8[3];
 
+                        // show angles as degrees in decimal
                         angle1_5_XBC.Text = r5Angle1.ToString();
                         angle2_5_XBC.Text = r5Angle2.ToString();
                         angle1_6_XBC.Text = r6Angle1.ToString();
@@ -165,9 +196,6 @@ namespace ReplayTableFixer
             {
                 loadSS(openFileDialog.FileName);
             }
-
-            //MessageBox.Show(fileContent, "File Content at path: " + filePath, MessageBoxButtons.OK);
-
         }
 
         private void clearSSGroupBox()
@@ -286,7 +314,7 @@ namespace ReplayTableFixer
             btnSaveAs.Enabled = true;
             btnOverwrite.Enabled = true;
 
-            lbAltered.Text = "Successfully imported angle data from '" + Path.GetFileName(txtLogPath.Text) + 
+            lbAltered.Text = "Successfully imported angle data from '" + Path.GetFileName(txtLogPath.Text) +
                 "'.\r\nPlease save changes now.";
             lbAltered.ForeColor = Color.Green;
         }
@@ -295,7 +323,6 @@ namespace ReplayTableFixer
         {
             if (ssObj.writeSS(ssFilePath.Text, getRTFromTextBoxes()))
             {
-                //MessageBox.Show(this, "SS saved successfully.", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 lbAltered.Text = "SS saved successfully to '" + Path.GetFileName(ssFilePath.Text) + "'.";
                 lbAltered.ForeColor = Color.Green;
             }
@@ -319,7 +346,6 @@ namespace ReplayTableFixer
                 string file = saveFileDialog1.FileName;
                 if (ssObj.writeSS(file, getRTFromTextBoxes()))
                 {
-                    //MessageBox.Show(this, "SS saved successfully.", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     lbAltered.Text = "SS saved successfully to '" + Path.GetFileName(file) + "'.";
                     lbAltered.ForeColor = Color.Green;
                 }
@@ -359,7 +385,7 @@ namespace ReplayTableFixer
                     string filePath = files.First();
                     loadSS(filePath);
                 }
-            }   
+            }
         }
 
         private void groupBoxXBCLog_DragOver(object sender, DragEventArgs e)
