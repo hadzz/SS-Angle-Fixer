@@ -1,5 +1,13 @@
+// Utility for restoring Xbox 360 DVD security sectors after the 
+// angles have been set to defaults in ss_sector_range.exe
+// Requires the dump's original Xbox Backup Creator log 
+
+// Code included is herby in the public domain
+// No restrictions on its use or redistribution
+
+// By Hadzz
+
 using System.Globalization;
-using System.Diagnostics;
 
 namespace ReplayTableFixer
 {
@@ -108,10 +116,17 @@ namespace ReplayTableFixer
             {
                 if (lines[i] == "RT CID MOD DATA          Drive Response")
                 {
+                    // make sure theres enough lines for rt to be valid
+                    if (lines.Length < i+11) {
+                        lblAltered_XBC.Text = "Error: Log's replay table size is wrong.";
+                        lblAltered_XBC.ForeColor = Color.Red;
+                        clearXBCGroupBox();
+                        return;
+                    }
                     // save all drive responses into a single string
                     // used to make sure this is the correct log
                     string fullRT = String.Empty;
-                    for (var j = i + 2; j <= i + 10; j++)
+                    for (var j = i + 2; j < i + 11; j++)
                     {
                         if (lines[j].Length == 48)
                         {
@@ -178,8 +193,8 @@ namespace ReplayTableFixer
                         lblAltered_XBC.Text = "SS data found from '" + Path.GetFileName(filePath) + "'.";
                         lblAltered_XBC.ForeColor = Color.Green;
 
-                        lblImport.Enabled = true;
                         btnReplaceAngles.Enabled = true;
+                        break;
                     }
                     else
                     {
@@ -231,7 +246,6 @@ namespace ReplayTableFixer
 
             ssFilePath.Text = String.Empty;
             btnReplaceAngles.Enabled = false;
-            lblImport.Enabled = false;
             btnOverwrite.Enabled = false;
             btnSaveAs.Enabled = false;
         }
@@ -242,7 +256,6 @@ namespace ReplayTableFixer
             lblAltered_XBC.Text = "Waiting for log file...";
             lblAltered_XBC.ForeColor = Color.Black;
             btnReplaceAngles.Enabled = false;
-            lblImport.Enabled = false;
             groupBoxXBCLog.AllowDrop = true;
         }
 
@@ -250,7 +263,6 @@ namespace ReplayTableFixer
         {
             groupBoxXBCLog.Enabled = false;
             btnReplaceAngles.Enabled = false;
-            lblImport.Enabled = false;
             lblAltered_XBC.Text = "Waiting for SS file...";
             lblAltered_XBC.ForeColor = Color.Black;
             groupBoxXBCLog.AllowDrop = false;
@@ -274,7 +286,6 @@ namespace ReplayTableFixer
 
             txtLogPath.Text = String.Empty;
             btnReplaceAngles.Enabled = false;
-            lblImport.Enabled = false;
         }
 
         private void btnLoadLog_Click(object sender, EventArgs e)

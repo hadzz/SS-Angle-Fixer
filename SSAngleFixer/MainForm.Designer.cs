@@ -92,7 +92,6 @@
             this.txtLogPath = new System.Windows.Forms.TextBox();
             this.btnLoadLog = new System.Windows.Forms.Button();
             this.btnReplaceAngles = new System.Windows.Forms.Button();
-            this.lblImport = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.groupBoxSS.SuspendLayout();
             this.groupBoxXBCLog.SuspendLayout();
@@ -450,7 +449,7 @@
             this.groupBoxXBCLog.Controls.Add(this.txtLogPath);
             this.groupBoxXBCLog.Controls.Add(this.btnLoadLog);
             this.groupBoxXBCLog.Enabled = false;
-            this.groupBoxXBCLog.Location = new System.Drawing.Point(451, 55);
+            this.groupBoxXBCLog.Location = new System.Drawing.Point(461, 55);
             this.groupBoxXBCLog.Name = "groupBoxXBCLog";
             this.groupBoxXBCLog.Size = new System.Drawing.Size(373, 282);
             this.groupBoxXBCLog.TabIndex = 3;
@@ -725,24 +724,13 @@
             // 
             this.btnReplaceAngles.Enabled = false;
             this.btnReplaceAngles.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.btnReplaceAngles.Location = new System.Drawing.Point(407, 147);
+            this.btnReplaceAngles.Image = global::SSAngleFixer.Properties.Resources.left_arrow;
+            this.btnReplaceAngles.Location = new System.Drawing.Point(400, 152);
             this.btnReplaceAngles.Name = "btnReplaceAngles";
-            this.btnReplaceAngles.Size = new System.Drawing.Size(29, 107);
+            this.btnReplaceAngles.Size = new System.Drawing.Size(52, 81);
             this.btnReplaceAngles.TabIndex = 4;
-            this.btnReplaceAngles.Text = "<";
             this.btnReplaceAngles.UseVisualStyleBackColor = true;
             this.btnReplaceAngles.Click += new System.EventHandler(this.btnReplaceAngles_Click);
-            // 
-            // lblImport
-            // 
-            this.lblImport.AutoSize = true;
-            this.lblImport.Enabled = false;
-            this.lblImport.Location = new System.Drawing.Point(400, 126);
-            this.lblImport.Name = "lblImport";
-            this.lblImport.Size = new System.Drawing.Size(43, 15);
-            this.lblImport.TabIndex = 5;
-            this.lblImport.Text = "Import";
-            this.lblImport.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label9
             // 
@@ -758,16 +746,15 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(843, 349);
+            this.ClientSize = new System.Drawing.Size(853, 349);
             this.Controls.Add(this.label9);
-            this.Controls.Add(this.lblImport);
             this.Controls.Add(this.btnReplaceAngles);
             this.Controls.Add(this.groupBoxXBCLog);
             this.Controls.Add(this.groupBoxSS);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.MaximizeBox = false;
             this.Name = "MainForm";
-            this.Text = "SS Angle Fixer v1.0 beta2";
+            this.Text = "SS Angle Fixer v1.0.0";
             this.groupBoxSS.ResumeLayout(false);
             this.groupBoxSS.PerformLayout();
             this.groupBoxXBCLog.ResumeLayout(false);
@@ -836,7 +823,6 @@
         private TextBox txtLogPath;
         private Button btnLoadLog;
         private Button btnReplaceAngles;
-        private Label lblImport;
         private Button btnOverwrite;
         private Button btnSaveAs;
         private Label label18;
