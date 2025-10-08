@@ -3,7 +3,7 @@
 
 Main use is for Redump contributers that would like to submit to abgx360. Since Redump likes matching security sector hash, a hidden "feature" in ss_sector_range.exe is that it'll set the angle readings to their default target values (1, 91, 181 and 271). These SS files cannot be submitted to abgx360, but if you have the log from Xbox Backup Creator saved, the original file can be restored.
 
-Simply load your SS.bin file in the left and the program will tell you if its necessary to import from the log or not. If modifications are detected, load the Xbox Backup Creator log on the right. If the log loads sucessfully, click the "Import" button, then click "Overwrite" or "Save As" button to save your restored SS.bin file.
+Simply load your SS.bin file in the left and the program will tell you if its necessary to import from the log. If modifications are detected, load the Xbox Backup Creator log on the right. If the log loads sucessfully, click the "Import" button, then click "Overwrite" or "Save As" button to save your restored SS.bin file.
 
 Only built and tested on Windows 10 x64, but code could easily be ported to Linux if you want to make it command line or use mono/another GUI framwork.
 
